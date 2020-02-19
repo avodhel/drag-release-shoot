@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
         }
         if (Input.GetMouseButton(0))
         { //drag
-            endPos = Camera.main.ScreenToWorldPoint(Input.mousePosition) + new Vector3(0, 0, 10);
+            endPos = Camera.main.ScreenToWorldPoint(Input.mousePosition) + new Vector3(0, 0, 0);
             gameObject.transform.position = endPos;
             forceAtPlayer = endPos - startPos;
             for (int i = 0; i < number; i++)
@@ -49,7 +49,10 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         { //leave
             rigidbody.useGravity = true;
-            rigidbody.velocity = new Vector2(-forceAtPlayer.x * forceFactor, -forceAtPlayer.y * forceFactor);
+            rigidbody.velocity = new Vector3(-forceAtPlayer.x * forceFactor, 
+                                             -forceAtPlayer.y * forceFactor, 
+                                             -forceAtPlayer.z * forceFactor);
+
             for (int i = 0; i < number; i++)
             {
                 Destroy(trajectoryDots[i]);
@@ -58,16 +61,17 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             rigidbody.useGravity = false;
-            rigidbody.velocity = Vector2.zero;
+            rigidbody.velocity = Vector3.zero;
             gameObject.transform.position = initPos;
 
         }
     }
 
-    private Vector2 calculatePosition(float elapsedTime)
+    private Vector3 calculatePosition(float elapsedTime)
     {
-        return new Vector2(endPos.x, endPos.y) + //X0
-                new Vector2(-forceAtPlayer.x * forceFactor, 
-                            -forceAtPlayer.y * forceFactor) * elapsedTime + 0.5f * Physics2D.gravity * elapsedTime * elapsedTime;
+        return new Vector3(endPos.x, endPos.y, endPos.z) + //X0
+                new Vector3(-forceAtPlayer.x * forceFactor, 
+                            -forceAtPlayer.y * forceFactor,
+                            -forceAtPlayer.z * forceFactor) * elapsedTime + 0.5f * Physics.gravity * elapsedTime * elapsedTime;
     }
 }

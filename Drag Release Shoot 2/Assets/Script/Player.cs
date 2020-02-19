@@ -38,8 +38,11 @@ public class Player : MonoBehaviour
         }
         if (Input.GetMouseButton(0))
         { //drag
-            endPos = Camera.main.ScreenToWorldPoint(Input.mousePosition) + new Vector3(0, 0, 0);
-            gameObject.transform.position = endPos;
+            var mousePos = Input.mousePosition;
+            mousePos.z = 10; // select distance = 10 units from the camera
+
+            endPos = Camera.main.ScreenToWorldPoint(mousePos) + new Vector3(0, 0, -10);
+            //gameObject.transform.position = endPos;
             forceAtPlayer = endPos - startPos;
             for (int i = 0; i < number; i++)
             {
@@ -69,9 +72,10 @@ public class Player : MonoBehaviour
 
     private Vector3 calculatePosition(float elapsedTime)
     {
-        return new Vector3(endPos.x, endPos.y, endPos.z) + //X0
-                new Vector3(-forceAtPlayer.x * forceFactor, 
-                            -forceAtPlayer.y * forceFactor,
-                            -forceAtPlayer.z * forceFactor) * elapsedTime + 0.5f * Physics.gravity * elapsedTime * elapsedTime;
+        //return new Vector3(endPos.x, endPos.y, endPos.z) + //X0
+        return gameObject.transform.position +
+               new Vector3(-forceAtPlayer.x * forceFactor, 
+                           -forceAtPlayer.y * forceFactor,
+                           -forceAtPlayer.z * forceFactor) * elapsedTime + 0.5f * Physics.gravity * elapsedTime * elapsedTime;
     }
 }

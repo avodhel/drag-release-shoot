@@ -758,11 +758,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: canonball
       objectReference: {fileID: 0}
-    - target: {fileID: 2443603133198576400, guid: 8ea3e0a3c69c41d4ab530e9be9982e58,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2443603133198576401, guid: 8ea3e0a3c69c41d4ab530e9be9982e58,
         type: 3}
       propertyPath: m_LocalPosition.x

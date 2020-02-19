@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ball : MonoBehaviour
+public class Player : MonoBehaviour
 {
+    public GameObject ball;
     public GameObject trajectoryDot;
+    public GameObject muzzlePoint;
     public float forceFactor;
     public int number;
 
-    //private GameObject muzzlePoint;
     private Vector3 startPos;
     private Vector3 endPos;
     private Vector3 initPos;
@@ -16,39 +17,32 @@ public class Ball : MonoBehaviour
     private Vector3 forceAtPlayer;
     private GameObject[] trajectoryDots;
 
-    //[HideInInspector]
-    //public bool drawTrajectoryControl = false;
-
-    //private void Awake()
-    //{
-    //    muzzlePoint = GameObject.FindGameObjectWithTag("canonball").gameObject;
-    //}
-
     private void Start()
     {
         initPos = gameObject.transform.position;
-        rb = GetComponent<Rigidbody>();
         trajectoryDots = new GameObject[number];
     }
 
     private void Update()
     {
-        //if (drawTrajectoryControl)
-        //{
-            UserInput();
-        //}
+        UserInput();
+    }
+
+    private void SpawnBall()
+    {
+        GameObject instantiatedBall = Instantiate(ball, muzzlePoint.transform.position, Quaternion.identity);
+        rb = instantiatedBall.GetComponent<Rigidbody>();
     }
 
     private void UserInput()
     {
         if (Input.GetMouseButtonDown(0))
         { //click
+            SpawnBall();
             startPos = gameObject.transform.position;
-            //startPos = muzzlePoint.transform.position;
             for (int i = 0; i < number; i++)
             {
                 trajectoryDots[i] = Instantiate(trajectoryDot, gameObject.transform);
-                //trajectoryDots[i] = Instantiate(trajectoryDot, muzzlePoint.transform);
             }
 
         }
@@ -68,8 +62,8 @@ public class Ball : MonoBehaviour
         { //leave
             rb.useGravity = true;
             rb.velocity = new Vector3(-forceAtPlayer.x * forceFactor,
-                                             -forceAtPlayer.y * forceFactor,
-                                             -forceAtPlayer.z * forceFactor);
+                                      -forceAtPlayer.y * forceFactor,
+                                      -forceAtPlayer.z * forceFactor);
 
             for (int i = 0; i < number; i++)
             {

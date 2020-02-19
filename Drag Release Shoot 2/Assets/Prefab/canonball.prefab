@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2443603132232170110}
   - component: {fileID: 2443603132232170105}
   - component: {fileID: 2443603132232170104}
-  - component: {fileID: 2443603132232170111}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -79,20 +78,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &2443603132232170111
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2443603132232170109}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1 &2443603132500633452
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,7 +89,6 @@ GameObject:
   - component: {fileID: 2443603132500633453}
   - component: {fileID: 2443603132500633448}
   - component: {fileID: 2443603132500633455}
-  - component: {fileID: 2443603132500633454}
   m_Layer: 0
   m_Name: canonBody
   m_TagString: Untagged
@@ -172,19 +156,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &2443603132500633454
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2443603132500633452}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2443603133198576400
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,7 +165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2443603133198576401}
-  - component: {fileID: 124891099912282570}
+  - component: {fileID: 1740417349}
   m_Layer: 0
   m_Name: canonball
   m_TagString: canonball
@@ -219,7 +190,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &124891099912282570
+--- !u!114 &1740417349
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -228,11 +199,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2443603133198576400}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7626910ab9d89f946b03d68274f747ff, type: 3}
+  m_Script: {fileID: 11500000, guid: b2905b6cb3f39cb4ca5da60945df5791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  muzzlePoint: {fileID: 2443603133814270194}
   ball: {fileID: 6421160170533468343, guid: bbb13a31d711b964a979841f13e1b924, type: 3}
+  trajectoryDot: {fileID: 1399538498284386758, guid: 032867534156e1547ab6e99e7e42c936,
+    type: 3}
+  muzzlePoint: {fileID: 2443603133814270193}
+  forceFactor: 4
+  number: 10
 --- !u!1 &2443603133814270193
 GameObject:
   m_ObjectHideFlags: 0

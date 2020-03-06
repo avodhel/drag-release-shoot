@@ -6,32 +6,28 @@ public class Player : MonoBehaviour
 {
     public GameObject ball;
     public GameObject trajectoryDot;
-    public GameObject muzzlePoint;
+    public float rotateSpeedX = 5f;
+    public float rotateSpeedY = 5f;
     public float forceFactor;
-    public int number;
+    public int numberOfDots;
 
     private Vector3 startPos;
     private Vector3 endPos;
     private Vector3 initPos;
-    private Rigidbody rb;
+    private Rigidbody ballRb;
     private Vector3 forceAtPlayer;
     private GameObject[] trajectoryDots;
 
     private void Start()
     {
         initPos = Camera.main.ScreenToWorldPoint(gameObject.transform.position);
-        trajectoryDots = new GameObject[number];
+        trajectoryDots = new GameObject[numberOfDots];
+        SpawnTrajectoryDots();
     }
 
     private void Update()
     {
         UserInput();
-    }
-
-    private void SpawnBall()
-    {
-        GameObject instantiatedBall = Instantiate(ball, gameObject.transform.position, Quaternion.identity);
-        rb = instantiatedBall.GetComponent<Rigidbody>();
     }
 
     private void UserInput()
@@ -40,10 +36,7 @@ public class Player : MonoBehaviour
         { //click
             SpawnBall();
             startPos = gameObject.transform.position;
-            for (int i = 0; i < number; i++)
-            {
-                trajectoryDots[i] = Instantiate(trajectoryDot, gameObject.transform);
-            }
+            TrajectoryDotsActiveState(true);
         }
 
         if (Input.GetMouseButton(0))
@@ -54,25 +47,28 @@ public class Player : MonoBehaviour
             RotateCanonBall();
 
             endPos = Camera.main.ScreenToWorldPoint(mousePos) + new Vector3(0, 0, -10);
+            endPos.y *= rotateSpeedY;
+            endPos.x *= rotateSpeedX;
             forceAtPlayer = endPos - startPos;
-            for (int i = 0; i < number; i++)
-            {
-                trajectoryDots[i].transform.position = calculatePosition(i * 0.1f);
-            }
+
+            CalculateDotsPosition();
         }
 
         if (Input.GetMouseButtonUp(0))
         { //leave
-            rb.useGravity = true;
-            rb.velocity = new Vector3(-forceAtPlayer.x * forceFactor,
-                                      -forceAtPlayer.y * forceFactor,
-                                      -forceAtPlayer.z * forceFactor);
+            ballRb.useGravity = true;
+            ballRb.velocity = new Vector3(-forceAtPlayer.x * forceFactor,
+                                          -forceAtPlayer.y * forceFactor,
+                                          -forceAtPlayer.z * forceFactor);
 
-            for (int i = 0; i < number; i++)
-            {
-                Destroy(trajectoryDots[i]);
-            }
+            TrajectoryDotsActiveState(false);
         }
+    }
+
+    private void SpawnBall()
+    {
+        GameObject instantiatedBall = Instantiate(ball, gameObject.transform.position, Quaternion.identity);
+        ballRb = instantiatedBall.GetComponent<Rigidbody>();
     }
 
     private void RotateCanonBall()
@@ -87,15 +83,45 @@ public class Player : MonoBehaviour
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
 
         //Get the angle to rotate and rotate
-        float angle = -Mathf.Atan2(transform.position.z - mouseWorldPos.z, transform.position.x - mouseWorldPos.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, angle + 90, 0), 4 * Time.deltaTime);
+        float angle = -Mathf.Atan2(transform.position.z - mouseWorldPos.z,
+                                   (transform.position.x - mouseWorldPos.x) * rotateSpeedX) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, angle + 90, 0), 20 * Time.deltaTime);
     }
 
-    private Vector3 calculatePosition(float elapsedTime)
+    #region Trajectory Dots
+
+    private void SpawnTrajectoryDots()
+    {
+        for (int i = 0; i < numberOfDots; i++)
+        {
+            trajectoryDots[i] = Instantiate(trajectoryDot, gameObject.transform);
+            (trajectoryDots[i] as GameObject).transform.parent = gameObject.transform;
+        }
+    }
+
+    private void TrajectoryDotsActiveState(bool activeState)
+    {
+        for (int i = 0; i < numberOfDots; i++)
+        {
+            trajectoryDots[i].SetActive(activeState);
+        }
+    }
+
+    private void CalculateDotsPosition()
+    {
+        for (int i = 0; i < numberOfDots; i++)
+        {
+            trajectoryDots[i].transform.position = CalculatePosition(i * 0.1f);
+        }
+    }
+
+    private Vector3 CalculatePosition(float elapsedTime)
     {
         return gameObject.transform.position +
                new Vector3(-forceAtPlayer.x * forceFactor,
                            -forceAtPlayer.y * forceFactor,
                            -forceAtPlayer.z * forceFactor) * elapsedTime + 0.5f * Physics.gravity * elapsedTime * elapsedTime;
     }
+
+    #endregion
 }
